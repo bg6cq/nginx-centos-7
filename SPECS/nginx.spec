@@ -14,8 +14,8 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.12.2
-Release:           2%{?dist}
+Version:           1.14.2
+Release:           1%{?dist}
 
 Summary:           A high performance web server and reverse proxy server
 Group:             System Environment/Daemons
@@ -26,6 +26,9 @@ URL:               http://nginx.org/
 
 Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
 Source1:           http://nginx.org/download/nginx-%{version}.tar.gz.asc
+Source2:           openssl-1.1.1a.tar.gz
+Source3:           ngx_devel_kit-0.3.0.tar.gz
+Source4:           lua-nginx-module-0.10.13.tar.gz
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -46,9 +49,10 @@ Patch0:            nginx-auto-cc-gcc.patch
 %if 0%{?with_gperftools}
 BuildRequires:     gperftools-devel
 %endif
-BuildRequires:     openssl-devel
+#BuildRequires:     openssl-devel
 BuildRequires:     pcre-devel
 BuildRequires:     zlib-devel
+BuildRequires:     LuaJIT
 
 Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
 
@@ -57,8 +61,9 @@ Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
 Requires:          nginx-all-modules = %{epoch}:%{version}-%{release}
 %endif
 
-Requires:          openssl
+#Requires:          openssl
 Requires:          pcre
+Requires:          LuaJIT
 Requires(pre):     nginx-filesystem
 %if 0%{?with_mailcap_mimetypes}
 Requires:          nginx-mimetypes
@@ -175,6 +180,13 @@ Requires:          nginx
 
 cp %{SOURCE200} .
 cp %{SOURCE210} .
+cp %{SOURCE2} .
+cp %{SOURCE3} .
+cp %{SOURCE4} .
+tar zxvf %{SOURCE2}
+tar zxvf %{SOURCE3}
+tar zxvf %{SOURCE4}
+
 
 %if 0%{?rhel} < 8
 sed -i -e 's#KillMode=.*#KillMode=process#g' %{SOURCE10}
@@ -183,12 +195,16 @@ sed -i -e 's#PROFILE=SYSTEM#HIGH:!aNULL:!MD5#' %{SOURCE12}
 
 
 %build
+%define debug_package %{nil}
 # nginx does not utilize a standard configure script.  It has its own
 # and the standard configure options cause the nginx configure script
 # to error out.  This is is also the reason for the DESTDIR environment
 # variable.
 export DESTDIR=%{buildroot}
 ./configure \
+    --with-openssl=openssl-1.1.1a  \
+    --add-module=lua-nginx-module-0.10.13 \
+    --add-module=ngx_devel_kit-0.3.0 \
     --prefix=%{_datadir}/nginx \
     --sbin-path=%{_sbindir}/nginx \
     --modules-path=%{_libdir}/nginx/modules \

@@ -15,7 +15,7 @@
 Name:              nginx
 Epoch:             1
 Version:           1.14.2
-Release:           1%{?dist}
+Release:           2%{?dist}
 
 Summary:           A high performance web server and reverse proxy server
 Group:             System Environment/Daemons
@@ -447,6 +447,9 @@ fi
 
 
 %changelog
+* 2018.12.20 Zhang Huanjie <james@ustc.edu.cn> - 1:1.42.2-2
+- LimitNOFILE=655360
+
 * Tue Mar 6 2018 Tadej Janež <tadej.j@nez.si> - 1:1.12.2-2
 - enable building the ngx_http_auth_request_module module (RHBZ #1471107)
 

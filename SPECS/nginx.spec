@@ -447,7 +447,7 @@ fi
 
 
 %changelog
-* 2018.12.20 Zhang Huanjie <james@ustc.edu.cn> - 1:1.42.2-2
+* Thu Dec 20 2018 Zhang Huanjie <james@ustc.edu.cn> - 1:1.42.2-2
 - LimitNOFILE=655360
 
 * Tue Mar 6 2018 Tadej Janež <tadej.j@nez.si> - 1:1.12.2-2

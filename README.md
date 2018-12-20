@@ -89,18 +89,26 @@ gpgcheck=0
 
 ## 8. 系统优化
 
+特别说明：
+
+优化的一个主要内容是增加nginx单个进程可以打开的文件数，不同的系统具体做法不同。
+
+如果nginx单个进程打开的文件是默认的1024，很容易因为连接多占满文件数，导致出现明显的异常。nginx.conf中
+设置worker_rlimit_nofile虽然可以加大nginx worker进程的文件数，但是并不加大nginx master进程的文件数，导致在nginx reload时无法正常进行。
+
+增加nginx进程文件数最简单的办法是启动nginx前执行`ulimit -HSn 655360`。
+
 8.1 禁用SELINUX
 
-编辑文件`/etc/selinux/config`，把`SELINUX=enforcing`修改为`SELINUX=disabled`
+编辑文件`vi /etc/selinux/config`，把`SELINUX=enforcing`修改为`SELINUX=disabled`
 
 8.2 增加打开的文件数
 
-编辑文件`vi /etc/security/limits.conf`，增加4行：
+注：使用本文编译的nginx，已经修改了这里，不需要单独增加。
+
+编辑文件`/usr/lib/systemd/system/nginx.service`，在[Service]段添加行：
 ```
-*               soft    nofile  655360
-*               hard    nofile  655360
-root            soft    nofile  655360
-root            hard    nofile  655360
+LimitNOFILE=655360
 ```
 
 编辑文件`vi /etc/sysctl.d/file-max.conf`，增加1行:
@@ -110,7 +118,7 @@ fs.file-max = 655360
 
 8.3 优化nf_conntrack部分
 
-编辑文件`/etc/modprobe.d/firewalld-sysctls.conf`，增加hashsize=13107即可把最大连接数修改为104万。
+编辑文件`vi /etc/modprobe.d/firewalld-sysctls.conf`，增加 hashsize=131072 即可把最大连接数修改为104万。
 ```
 install nf_conntrack /usr/sbin/modprobe --ignore-install nf_conntrack hashsize=131072 $CMDLINE_OPTS && /usr/sbin/sysctl --quiet --pattern 'net[.]netfilter[.]nf_conntrack.*' --sys
 tem
@@ -140,6 +148,16 @@ echo 60 > nf_conntrack_dccp_timeout_request
 echo 60 > nf_conntrack_dccp_timeout_respond
 echo 60 > nf_conntrack_dccp_timeout_timewait
 echo 600 > nf_conntrack_sctp_timeout_established
+```
+
+## 9. 系统优化完成检查点：
+
+执行以下命令，查看输出:
+```
+sestatus | grep "SELinux status"
+cat /proc/sys/fs/file-max
+dmesg | grep conntrack
+grep "Max open files" /proc/`cat /var/run/nginx.pid`/limits
 ```
 
 ## 附录：

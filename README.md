@@ -106,11 +106,11 @@ gpgcheck=0
 
 注：使用本文编译的nginx，已经修改了这里，不需要单独增加。
 
-编辑文件`/usr/lib/systemd/system/nginx.service.d/my-limit.conf`，增加[Service]段并添加行：
+编辑文件`/etc/systemd/system/nginx.service.d/my-limit.conf`，增加[Service]段并添加行：
 ```
-mkdir /usr/lib/systemd/system/nginx.service.d/
-echo "[Service]" > /usr/lib/systemd/system/nginx.service.d/my-limit.conf
-echo "LimitNOFILE=655360" >> /usr/lib/systemd/system/nginx.service.d/my-limit.conf
+mkdir /etc/systemd/system/nginx.service.d/
+echo "[Service]" > /etc/systemd/system/nginx.service.d/my-limit.conf
+echo "LimitNOFILE=655360" >> /etc/systemd/system/nginx.service.d/my-limit.conf
 ```
 
 编辑文件`/etc/sysctl.d/file-max.conf`，增加1行:

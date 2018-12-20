@@ -106,14 +106,16 @@ gpgcheck=0
 
 注：使用本文编译的nginx，已经修改了这里，不需要单独增加。
 
-编辑文件`/usr/lib/systemd/system/nginx.service`，在[Service]段添加行：
+编辑文件`/usr/lib/systemd/system/nginx.service.d/my-limit.conf`，增加[Service]段并添加行：
 ```
-LimitNOFILE=655360
+mkdir /usr/lib/systemd/system/nginx.service.d/
+echo "[Service]" > /usr/lib/systemd/system/nginx.service.d/my-limit.conf
+echo "LimitNOFILE=655360" >> /usr/lib/systemd/system/nginx.service.d/my-limit.conf
 ```
 
-编辑文件`vi /etc/sysctl.d/file-max.conf`，增加1行:
+编辑文件`/etc/sysctl.d/file-max.conf`，增加1行:
 ```
-fs.file-max = 655360
+echo "fs.file-max = 655360" > /etc/sysctl.d/file-max.conf
 ```
 
 8.3 优化nf_conntrack部分

@@ -14,8 +14,8 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.14.2
-Release:           2%{?dist}
+Version:           1.16.1
+Release:           3%{?dist}
 
 Summary:           A high performance web server and reverse proxy server
 Group:             System Environment/Daemons
@@ -26,7 +26,7 @@ URL:               http://nginx.org/
 
 Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
 Source1:           http://nginx.org/download/nginx-%{version}.tar.gz.asc
-Source2:           openssl-1.1.1a.tar.gz
+Source2:           openssl-1.1.1c.tar.gz
 Source3:           ngx_devel_kit-0.3.0.tar.gz
 Source4:           lua-nginx-module-0.10.13.tar.gz
 Source10:          nginx.service
@@ -202,7 +202,7 @@ sed -i -e 's#PROFILE=SYSTEM#HIGH:!aNULL:!MD5#' %{SOURCE12}
 # variable.
 export DESTDIR=%{buildroot}
 ./configure \
-    --with-openssl=openssl-1.1.1a  \
+    --with-openssl=openssl-1.1.1c  \
     --add-module=lua-nginx-module-0.10.13 \
     --add-module=ngx_devel_kit-0.3.0 \
     --prefix=%{_datadir}/nginx \

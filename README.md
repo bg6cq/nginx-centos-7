@@ -1,6 +1,6 @@
 # CentOS 7 nginx编译和优化
 
-CentOS本身没有nginx，epel中的nginx版本比较低，这里给出CentOS 7.6 编译nginx.1.42.2并包含lua支持的步骤，最后还给出一些系统优化的方法。
+CentOS本身没有nginx，epel中的nginx版本比较低，这里给出CentOS 7.6 编译nginx.1.16.1并包含lua支持的步骤，最后还给出一些系统优化的方法。
 
 如果仅仅为了使用最新的nginx，不愿意自己编译，请下载CentOS 7.6 x86_64最小安装，
 执行`rpm -i https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm`启用epep库，
@@ -166,8 +166,8 @@ grep "Max open files" /proc/`cat /var/run/nginx.pid`/limits
 
 CentOS epel 默认的nginx之外，下载了如下软件：
 
-* http://nginx.org/download/nginx-1.14.2.tar.gz http://nginx.org/download/nginx-1.14.2.tar.gz.asc
+* http://nginx.org/download/nginx-1.16.1.tar.gz http://nginx.org/download/nginx-1.16.1.tar.gz.asc
 * http://luajit.org/download/LuaJIT-2.0.5.tar.gz
-* https://www.openssl.org/source/openssl-1.1.1a.tar.gz
+* https://www.openssl.org/source/openssl-1.1.1c.tar.gz
 * https://github.com/simplresty/ngx_devel_kit/archive/v0.3.0.tar.gz
 * https://github.com/openresty/lua-nginx-module/archive/v0.10.13.tar.gz
